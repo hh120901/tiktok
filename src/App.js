@@ -1,27 +1,32 @@
 // import logo from "./logo.svg";
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useStore,actions } from "./store";
 
 function App() {
-  const [number, setnumber] = useState(0);
-  const increase = () => (console.log(number), setnumber(number + 1));
-  const decrease = () => (console.log(number), setnumber(number - 1));
-  useEffect(() => {
-    console.log("effect");
-  }, []);
+  const [state, dispatch] = useStore()
+  const {todos, todoInput} = state
+
+  const handleAdd = ()=>{
+    dispatch(actions.addTodo(todoInput))
+  }
+  console.log(todos)
 
   return (
-    <div className="App">
-      <h1>REACT JS</h1>
-      <h2>{number || "0"}</h2>
-      <button onClick={increase} style={{ margin: 10 }}>
-        Increase
-      </button>
-      <button onClick={decrease} style={{ margin: 10 }}>
-        Decrese
-      </button>
+    <div id="app">
+      <input 
+        value={todoInput}
+        placeholder="Enter todo...."
+        onChange={e =>{
+          dispatch(actions.setTodoInput(e.target.value))
+        }}
+
+      />
+      <button onClick={handleAdd}>ADD</button>
+      {todos.map((todo,index)=>(
+        <li key={index}>{todo}</li>
+      ))}
     </div>
-  );
+  )
 }
 
 export default App;
